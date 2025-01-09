@@ -4,23 +4,23 @@ import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
-import { pool } from './common/db';
-import { L_J_JWT } from './common/constant/jwt.const';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { pool } from './common/db';
+import * as dotenv from 'dotenv';
+
+dotenv.config({ path: '.env.local' });
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(pool),
     PassportModule,
     JwtModule.register({
-      secret: L_J_JWT,
+      secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '2d' },
     }),
     AuthModule,
     UsersModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
