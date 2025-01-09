@@ -9,7 +9,7 @@ export const pool = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   synchronize: process.env.NODE_ENV === 'development' ? true : false,
-  entities: [__dirname + '/**/*.entity{.ts,.js}'],
+  entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
   ssl: {
     rejectUnauthorized: false,
   },

@@ -1,26 +1,41 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { LoginDto } from '../auth/dto/login.dto';
+import { User } from './entities/user.entity';
+import { CreateUserDto } from './dto/createUser.dto';
+import { hashPassword } from 'src/common/utils/crypto/passwordHash';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(
+    @InjectRepository(User)
+    private readonly user_repository: Repository<User>,
+  ) {}
+
+  async findAll() {
+    return await this.user_repository.find();
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findOne(loginDto: LoginDto) {
+    return await this.user_repository.findOne({
+      where: { username: loginDto.username },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
+  async createUser(createUserDto: CreateUserDto) {
+    const { fullname, username, password, email } = createUserDto;
+    const password_hash = await hashPassword(password);
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
+    const newUser = this.user_repository.create({
+      fullname,
+      username,
+      email,
+      password_hash,
+      account_status: 'active',
+    });
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+    await this.user_repository.save(newUser);
+    return newUser;
   }
 }
