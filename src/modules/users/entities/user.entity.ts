@@ -1,4 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Blog } from 'src/modules/blog/entities/blog.entity';
 
 @Entity('users')
 export class User {
@@ -17,18 +25,10 @@ export class User {
   @Column({ select: false, nullable: false })
   password_hash: string;
 
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    nullable: false,
-  })
+  @CreateDateColumn()
   created_at: Date;
 
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    nullable: false,
-  })
+  @UpdateDateColumn()
   updated_at: Date;
 
   @Column({
@@ -47,4 +47,7 @@ export class User {
     default: 'active',
   })
   account_status: string;
+
+  @OneToMany(() => Blog, (blog) => blog.user)
+  blogs: Blog[];
 }
