@@ -6,6 +6,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { pool } from './common/db';
+import { BlogModule } from './modules/blog/blog.module';
 import * as dotenv from 'dotenv';
 
 dotenv.config({ path: '.env.local' });
@@ -20,6 +21,7 @@ dotenv.config({ path: '.env.local' });
     }),
     AuthModule,
     UsersModule,
+    BlogModule,
   ],
 })
 export class AppModule implements NestModule {
