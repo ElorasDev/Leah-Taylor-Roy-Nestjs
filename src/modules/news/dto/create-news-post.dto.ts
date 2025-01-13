@@ -28,6 +28,10 @@ export class CreateNewsPostDto {
   index_image_url: string | 'default';
 
   @IsNotEmpty()
+  @IsString()
+  location: string;
+
+  @IsNotEmpty()
   @IsEnum(['archived', 'published', 'draft'])
   status: 'archived' | 'published' | 'draft';
 }
