@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Blog } from 'src/modules/blog/entities/blog.entity';
+import { Media } from 'src/modules/media/entities/media.entity';
 
 @Entity('users')
 export class User {
@@ -50,4 +51,7 @@ export class User {
 
   @OneToMany(() => Blog, (blog) => blog.user)
   blogs: Blog[];
+
+  @OneToMany(() => Media, (media) => media.user)
+  medias: Media[];
 }
