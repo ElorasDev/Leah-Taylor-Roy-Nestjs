@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Blog } from 'src/modules/blog/entities/blog.entity';
 import { Media } from 'src/modules/media/entities/media.entity';
+import { News } from 'src/modules/news/entities/news.entity';
 
 @Entity('users')
 export class User {
@@ -54,4 +55,7 @@ export class User {
 
   @OneToMany(() => Media, (media) => media.user)
   medias: Media[];
+
+  @OneToMany(() => News, (news) => news.user)
+  newsPosts: News[];
 }

@@ -19,17 +19,13 @@ export class CreateNewsPostDto {
   @IsString()
   content: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsInt()
   like: number | 0;
 
   @IsNotEmpty()
   @IsString()
   index_image_url: string | 'default';
-
-  @IsNotEmpty()
-  @IsString()
-  location: string;
 
   @IsNotEmpty()
   @IsEnum(['archived', 'published', 'draft'])

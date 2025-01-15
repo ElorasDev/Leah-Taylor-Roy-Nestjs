@@ -85,14 +85,15 @@ export class MediaService {
   }
 
   async updateMedia(
-    filename: string,
+    id: number,
     updateMediaDto: UpdateMediaDto,
   ): Promise<Media> {
-    await this.media_repository.update(filename, updateMediaDto);
-    return this.media_repository.findOne({ where: { filename } });
+    await this.media_repository.update(id, updateMediaDto);
+    return this.media_repository.findOne({ where: { id } });
   }
 
-  async removeMedia(title: string): Promise<void> {
-    await this.media_repository.delete(title);
+  async removeMedia(id: number): Promise<string> {
+    await this.media_repository.delete(id);
+    return `Event Deleted`;
   }
 }

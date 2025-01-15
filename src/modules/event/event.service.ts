@@ -4,6 +4,7 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { Repository } from 'typeorm';
 import { Event } from './entities/event.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class EventService {
@@ -120,7 +121,7 @@ export class EventService {
     return event;
   }
 
-  async createEvent(createEventDto: CreateEventDto) {
+  async createEvent(createEventDto: CreateEventDto, user: User) {
     const {
       title,
       index_image_url,
@@ -137,6 +138,7 @@ export class EventService {
       start_datetime,
       end_datetime,
       status,
+      user,
     });
 
     await this.event_repository.save(newEvent);
