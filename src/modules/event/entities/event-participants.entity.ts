@@ -23,6 +23,9 @@ export class EventParticipants {
   @Column({ length: 256, nullable: false })
   fullname: string;
 
+  @Column({ type: 'varchar', length: 15, nullable: false })
+  phone_number: string;
+
   @Column({ length: 256, nullable: false, unique: true })
   email: string;
 

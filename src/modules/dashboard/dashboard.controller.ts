@@ -17,6 +17,7 @@ import {
   ApiResponse,
   ApiBody,
   ApiConsumes,
+  ApiParam,
 } from '@nestjs/swagger';
 import { DashboardService } from './dashboard.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -32,6 +33,7 @@ import { EventService } from '../event/event.service';
 import { UpdateEventDto } from '../event/dto/update-event.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MediaService } from '../media/media.service';
+import { EventParticipantsService } from '../event/event-participants.service';
 
 @ApiTags('dashboard')
 @Controller('dashboard')
@@ -42,6 +44,7 @@ export class DashboardController {
     private readonly blogService: PostService,
     private readonly eventService: EventService,
     private readonly mediaService: MediaService,
+    private readonly eventParticipantsService: EventParticipantsService,
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -50,6 +53,23 @@ export class DashboardController {
   @ApiResponse({ status: 200, description: 'Return dashboard data.' })
   async getDashboardData() {
     return this.dashboardService.getDashboardData();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('event-participants/:id')
+  @ApiOperation({ summary: 'Get participants of an event' })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'ID of the event',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Return participants of the event.',
+  })
+  @ApiResponse({ status: 404, description: 'Event not found.' })
+  async getEventParticipants(@Param('id') id: number) {
+    return this.eventParticipantsService.findParticipants(Number(id));
   }
 
   @UseGuards(JwtAuthGuard)

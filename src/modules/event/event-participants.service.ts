@@ -22,7 +22,7 @@ export class EventParticipantsService {
     title: string,
     registerClient: RegisterClientDto,
   ): Promise<EventParticipants> {
-    const { fullname, email } = registerClient;
+    const { fullname, email, phone_number } = registerClient;
 
     const event = await this.eventRepository.findOne({ where: { title } });
     if (!event) {
@@ -41,6 +41,7 @@ export class EventParticipantsService {
     const newClient = this.eventParticipantsRepository.create({
       fullname,
       email,
+      phone_number,
       event,
     });
 
@@ -50,5 +51,18 @@ export class EventParticipantsService {
     await this.eventRepository.save(event);
 
     return newClient;
+  }
+
+  async findParticipants(eventId: number): Promise<EventParticipants[]> {
+    const event = await this.eventRepository.findOne({
+      where: { id: eventId },
+    });
+    if (!event) {
+      throw new NotFoundException(`Event with ID ${eventId} not found`);
+    }
+    const participants = await this.eventParticipantsRepository.find({
+      where: { event },
+    });
+    return participants;
   }
 }
