@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Param,
-  // Post,
-  // Body,
-  Query,
-  // UseInterceptors,
-  // UploadedFile,
-} from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import {
   ApiOperation,
   ApiParam,
@@ -16,22 +7,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { MediaService } from './media.service';
-// import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('media')
 @Controller('media')
 export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
-
-  // we dont need to Post method
-  // @Post('upload')
-  // @UseInterceptors(FileInterceptor('file'))
-  // async uploadFile(
-  //   @UploadedFile() file: Express.Multer.File,
-  //   @Body('user') user: User,
-  // ) {
-  //   return this.mediaService.createMedia(file, user);
-  // }
 
   @Get()
   @ApiOperation({ summary: 'Get all media' })

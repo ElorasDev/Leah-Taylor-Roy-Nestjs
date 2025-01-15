@@ -23,7 +23,7 @@ export class NewsService {
       content,
       index_image_url,
       status,
-      user_id: user.id,
+      user: user,
     });
 
     await this.newsPost_repository.save(newPost);

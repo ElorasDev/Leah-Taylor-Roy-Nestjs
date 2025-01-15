@@ -45,7 +45,7 @@ export class News {
   @Column({ nullable: false })
   user_id: number;
 
-  @ManyToOne(() => User, (user) => user.blogs)
+  @ManyToOne(() => User, (user) => user.newsPosts)
   @JoinColumn({ name: 'user_id' })
   user: User;
 }
