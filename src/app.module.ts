@@ -1,30 +1,41 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-
+import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
+import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { pool } from './common/db';
+import { BlogModule } from './modules/blog/blog.module';
+import { NewsModule } from './modules/news/news.module';
+import { EventModule } from './modules/event/event.module';
+import { MediaModule } from './modules/media/media.module';
+import { ContactModule } from './modules/contact/contact.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
 import * as dotenv from 'dotenv';
+
 dotenv.config({ path: '.env.local' });
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: process.env.DB_TYPE as 'postgres',
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT, 10),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE,
-      synchronize: process.env.NODE_ENV === 'development' ? true : false,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      ssl: {
-        rejectUnauthorized: false,
-      },
+    TypeOrmModule.forRoot(pool),
+    PassportModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '2d' },
     }),
     AuthModule,
     UsersModule,
+    BlogModule,
+    NewsModule,
+    EventModule,
+    MediaModule,
+    ContactModule,
+    DashboardModule,
   ],
-  controllers: [],
-  providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}
