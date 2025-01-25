@@ -19,6 +19,7 @@ export class AuthService {
     this.loginRateLimiter = new RateLimiterMemory({
       points: 5,
       duration: 900,
+      keyPrefix: 'login_fail',
     });
   }
 
@@ -27,26 +28,37 @@ export class AuthService {
 
     const user = await this.auth_repository.findOne({
       where: { username },
-      select: ['id', 'username', 'email', 'password_hash', 'account_status'],
+      select: [
+        'id',
+        'username',
+        'email',
+        'password_hash',
+        'account_status',
+        'failed_attempts',
+      ],
     });
+
     if (!user || user.account_status === 'locked') {
       throw new UnauthorizedException('Invalid credentials');
     }
 
     const isPasswordValid = await comparePassword(password, user.password_hash);
+    console.log(isPasswordValid);
     if (!isPasswordValid) {
+      user.failed_attempts = Number(user.failed_attempts) + 1;
+      await this.auth_repository.save(user);
       try {
         await this.loginRateLimiter.consume(username);
-      } catch (rejRes) {
+      } catch {
         user.account_status = 'locked';
         await this.auth_repository.save(user);
-        throw new UnauthorizedException(
-          'Your account is temporarily unavailable.',
-        );
+        throw new UnauthorizedException('Invalid credentials.');
       }
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    user.failed_attempts = 0;
+    await this.auth_repository.save(user);
     await this.loginRateLimiter.delete(username);
 
     const payload = { email: user.email, sub: user.id };
