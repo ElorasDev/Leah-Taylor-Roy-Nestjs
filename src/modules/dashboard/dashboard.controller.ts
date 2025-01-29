@@ -138,11 +138,24 @@ export class DashboardController {
       },
     },
   })
+  @Post()
   async uploadFile(
+    @Body()
+    body: {
+      filename: string;
+      path: string;
+      mimetype: string;
+      size: number;
+    },
     @Request() req: { user: User },
-    @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.mediaService.createMedia(file, req.user);
+    return this.mediaService.createMedia(
+      body.filename,
+      body.path,
+      body.mimetype,
+      body.size,
+      req.user,
+    );
   }
 
   @UseGuards(JwtAuthGuard)

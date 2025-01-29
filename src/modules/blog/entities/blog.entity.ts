@@ -17,13 +17,13 @@ export class Blog {
   @Column({ length: 256, nullable: false })
   title: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true, default: null })
   category_id: number;
 
   @Column({ type: 'text', nullable: false })
   content: string;
 
-  @Column({ nullable: false, default: 0, type: 'int' })
+  @Column({ nullable: true, default: 0, type: 'int' })
   like: number;
 
   @Column({ type: 'text', nullable: false, default: 'default' })

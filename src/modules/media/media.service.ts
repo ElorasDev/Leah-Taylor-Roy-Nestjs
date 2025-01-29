@@ -4,8 +4,6 @@ import { UpdateMediaDto } from './dto/update-media.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Media } from './entities/media.entity';
 import { Repository } from 'typeorm';
-import { join } from 'path';
-import { writeFileSync } from 'fs';
 import { User } from '../users/entities/user.entity';
 
 @Injectable()
@@ -25,18 +23,21 @@ export class MediaService {
     }
   }
 
-  async createMedia(file: Express.Multer.File, user: User): Promise<Media> {
-    const filePath = join(__dirname, '..', 'upload', file.originalname);
-    writeFileSync(filePath, file.buffer);
-
-    const fileSizeInMB = file.size / (1024 * 1024);
+  async createMedia(
+    filename: string,
+    path: string,
+    mimetype: string,
+    size: number,
+    user: User,
+  ): Promise<Media> {
+    const fileSizeInMB = size / (1024 * 1024);
 
     const createMediaDto: CreateMediaDto = {
-      filename: file.originalname,
-      path: filePath,
-      mimetype: file.mimetype,
+      filename,
+      path,
+      mimetype,
       size: fileSizeInMB,
-      file_type: this.getFileType(file.mimetype),
+      file_type: this.getFileType(mimetype),
       uploaded_by: user.id,
       published: false,
     };

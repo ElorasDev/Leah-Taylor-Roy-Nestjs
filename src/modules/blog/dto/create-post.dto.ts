@@ -1,19 +1,25 @@
-import { IsNotEmpty, IsString, IsEnum, IsInt } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsEnum,
+  IsInt,
+  IsOptional,
+} from 'class-validator';
 
 export class CreatePostDto {
   @IsNotEmpty()
   @IsString()
   title: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsInt()
-  category_id: number;
+  category_id: number | null;
 
   @IsNotEmpty()
   @IsString()
   content: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsInt()
   like: number;
 
