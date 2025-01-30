@@ -8,8 +8,8 @@ import {
   Delete,
   Param,
   Patch,
-  UploadedFile,
   UseInterceptors,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -34,6 +34,7 @@ import { UpdateEventDto } from '../event/dto/update-event.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MediaService } from '../media/media.service';
 import { EventParticipantsService } from '../event/event-participants.service';
+import { UpdateMediatDto } from '../media/dto/update-media.dto';
 
 @ApiTags('dashboard')
 @Controller('dashboard')
@@ -175,7 +176,6 @@ export class DashboardController {
 
   @UseGuards(JwtAuthGuard)
   @Patch('update-file/:id')
-  @UseInterceptors(FileInterceptor('file'))
   @ApiOperation({ summary: 'Update a file' })
   @ApiResponse({
     status: 200,
@@ -184,9 +184,17 @@ export class DashboardController {
   @ApiResponse({ status: 404, description: 'File not found.' })
   async updateFile(
     @Param('id') id: number,
-    @UploadedFile() file: Express.Multer.File,
+    @Body() updateNewsPostDto: UpdateMediatDto,
   ) {
-    return this.mediaService.updateMedia(Number(id), file);
+    if (updateNewsPostDto.published === undefined) {
+      throw new BadRequestException('Published status is required.');
+    }
+
+    const updateMediaDto = {
+      published: updateNewsPostDto.published,
+    };
+
+    return this.mediaService.updateMedia(Number(id), updateMediaDto);
   }
 
   @UseGuards(JwtAuthGuard)

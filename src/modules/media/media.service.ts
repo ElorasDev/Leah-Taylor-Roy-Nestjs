@@ -1,6 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateMediaDto } from './dto/create-media.dto';
-import { UpdateMediaDto } from './dto/update-media.dto';
+import { UpdateMediatDto } from './dto/update-media.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Media } from './entities/media.entity';
 import { Repository } from 'typeorm';
@@ -87,10 +91,18 @@ export class MediaService {
 
   async updateMedia(
     id: number,
-    updateMediaDto: UpdateMediaDto,
+    updateMediaDto: UpdateMediatDto,
   ): Promise<Media> {
+    if (!updateMediaDto || Object.keys(updateMediaDto).length === 0) {
+      throw new BadRequestException('No values provided for update.');
+    }
+
     await this.media_repository.update(id, updateMediaDto);
-    return this.media_repository.findOne({ where: { id } });
+    const updatedMedia = await this.media_repository.findOne({ where: { id } });
+    if (!updatedMedia) {
+      throw new NotFoundException(`Media with ID "${id}" not found`);
+    }
+    return updatedMedia;
   }
 
   async removeMedia(id: number): Promise<string> {
