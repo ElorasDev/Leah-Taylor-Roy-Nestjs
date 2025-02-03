@@ -38,24 +38,27 @@ export class NewsService {
     } else return this.newsPost_repository.find();
   }
 
-  async findPublishedPostByTitle(title: string) {
+  async findPublishedPostByIdAndTitle(id: number, title: string) {
     const post = await this.newsPost_repository.findOne({
       where: {
+        id,
         title,
         status: 'published',
       },
       select: [
+        'id',
         'title',
         'user',
         'index_image_url',
         'content',
         'created_at',
-        'like',
+        'updated_at',
       ],
     });
+
     if (!post) {
       throw new NotFoundException(
-        `Published post with title "${title}" not found`,
+        `Published post with id "${id}" and title "${title}" not found`,
       );
     }
     return post;

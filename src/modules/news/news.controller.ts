@@ -55,8 +55,13 @@ export class NewsController {
     }
   }
 
-  @Get('published/:title')
-  @ApiOperation({ summary: 'Get a published news post by title' })
+  @Get('published/:title/:id')
+  @ApiOperation({ summary: 'Get a published news post by id and title' })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'ID of the published news post',
+  })
   @ApiParam({
     name: 'title',
     required: true,
@@ -69,15 +74,14 @@ export class NewsController {
   @ApiResponse({ status: 404, description: 'Published news post not found' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
-  async findOnePublishedNewsPost(@Param('title') title: string) {
-    try {
-      return await this.newsService.findPublishedPostByTitle(title);
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw { message: error.message };
-      }
-      throw { message: 'Internal Server Error', error: error.message };
-    }
+  async findOnePublishedNewsPost(
+    @Param('id') id: string,
+    @Param('title') title: string,
+  ) {
+    return await this.newsService.findPublishedPostByIdAndTitle(
+      Number(id),
+      title,
+    );
   }
 
   @Get('archived/:title')
