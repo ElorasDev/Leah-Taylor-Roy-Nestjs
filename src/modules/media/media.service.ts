@@ -33,6 +33,7 @@ export class MediaService {
     mimetype: string,
     size: number,
     user: User,
+    published: boolean,
   ): Promise<Media> {
     const fileSizeInMB = size / (1024 * 1024);
 
@@ -43,7 +44,7 @@ export class MediaService {
       size: fileSizeInMB,
       file_type: this.getFileType(mimetype),
       uploaded_by: user.id,
-      published: false,
+      published,
     };
 
     const newMedia = this.media_repository.create(createMediaDto);

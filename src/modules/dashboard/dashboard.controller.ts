@@ -148,15 +148,18 @@ export class DashboardController {
       path: string;
       mimetype: string;
       size: number;
+      published: boolean;
     },
     @Request() req: { user: User },
   ) {
+    console.log(body.published);
     return this.mediaService.createMedia(
       body.filename,
       body.path,
       body.mimetype,
       body.size,
       req.user,
+      body.published,
     );
   }
 
