@@ -33,6 +33,36 @@ export class EventController {
     }
   }
 
+  @Get('/:title/:id')
+  @ApiOperation({ summary: 'Get event by title and id' })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'ID of the event',
+  })
+  @ApiParam({
+    name: 'title',
+    required: true,
+    description: 'Title of the event post',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully retrieved event',
+  })
+  @ApiResponse({ status: 404, description: 'Event not found' })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  async findEventByTitleAndId(
+    @Param('id') id: string,
+    @Param('title') title: string,
+  ) {
+    try {
+      return this.eventService.findEvent(Number(id), title);
+    } catch (error) {
+      throw { message: 'Internal Server Error', error: error.message };
+    }
+  }
+
   @Get('upcoming')
   @ApiOperation({ summary: 'Get all upcoming events' })
   @ApiResponse({
@@ -180,7 +210,7 @@ export class EventController {
     }
   }
 
-  @Post('ongoing/:title/register')
+  @Post('upcoming/:title/:id/register')
   @ApiOperation({ summary: 'Register a client for an ongoing event' })
   @ApiParam({
     name: 'title',
@@ -201,10 +231,15 @@ export class EventController {
   })
   async registerClient(
     @Param('title') title: string,
+    @Param('id') id: string,
     @Body() registerClient: RegisterClientDto,
   ) {
     try {
-      return this.eventParticipants.registerClient(title, registerClient);
+      return this.eventParticipants.registerClient(
+        title,
+        Number(id),
+        registerClient,
+      );
     } catch (error) {
       throw { message: 'Internal Server Error', error: error.message };
     }

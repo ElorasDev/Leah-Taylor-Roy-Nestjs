@@ -16,7 +16,7 @@ export class RegisterClientDto {
   })
   @IsNotEmpty()
   @IsString()
-  @Matches(/^\+?1?\d{10,14}$/, {
+  @Matches(/^(\+?1)?[-.\s]?(\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}$/, {
     message: 'Phone number must be a valid Canadian number',
   })
   phone_number: string;

@@ -57,10 +57,10 @@ export class DashboardController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('event-participants/:id')
+  @Get('event-participants/:event_id')
   @ApiOperation({ summary: 'Get participants of an event' })
   @ApiParam({
-    name: 'id',
+    name: 'event_id',
     required: true,
     description: 'ID of the event',
   })
@@ -69,8 +69,8 @@ export class DashboardController {
     description: 'Return participants of the event.',
   })
   @ApiResponse({ status: 404, description: 'Event not found.' })
-  async getEventParticipants(@Param('id') id: number) {
-    return this.eventParticipantsService.findParticipants(Number(id));
+  async getEventParticipants(@Param('event_id') eventId: string) {
+    return this.eventParticipantsService.findParticipants(Number(eventId));
   }
 
   @UseGuards(JwtAuthGuard)
@@ -115,6 +115,7 @@ export class DashboardController {
     @Request() req: { user: User },
     @Body() createEventDto: CreateEventDto,
   ) {
+    console.log('data is:', createEventDto);
     return this.eventService.createEvent(createEventDto, req.user);
   }
 
