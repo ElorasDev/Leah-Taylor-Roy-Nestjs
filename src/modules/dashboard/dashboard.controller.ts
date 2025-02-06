@@ -152,7 +152,6 @@ export class DashboardController {
     },
     @Request() req: { user: User },
   ) {
-    console.log(body.published);
     return this.mediaService.createMedia(
       body.filename,
       body.path,
