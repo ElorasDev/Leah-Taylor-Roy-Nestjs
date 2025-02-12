@@ -13,7 +13,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: ['https://leahtaylorroymp-development.vercel.app'],
+    origin: [
+      'https://leahtaylorroymp-development.vercel.app',
+      'http://localhost:3000',
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type, Authorization, Cache-Control',
   });

@@ -12,6 +12,7 @@ import { EventModule } from './modules/event/event.module';
 import { MediaModule } from './modules/media/media.module';
 import { ContactModule } from './modules/contact/contact.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { CertificatesModule } from './modules/certificates/certificates.module';
 import * as dotenv from 'dotenv';
 
 dotenv.config({ path: '.env.local' });
@@ -32,6 +33,7 @@ dotenv.config({ path: '.env.local' });
     MediaModule,
     ContactModule,
     DashboardModule,
+    CertificatesModule,
   ],
 })
 export class AppModule implements NestModule {
