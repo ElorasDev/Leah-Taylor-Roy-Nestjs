@@ -8,14 +8,14 @@ import { Support } from './entities/support.entity';
 export class SupportService {
   constructor(
     @InjectRepository(Support)
-    private createRepository: Repository<Support>,
+    private requestRepository: Repository<Support>,
   ) {}
   async createRequest(createSupportDto: CreateSupportDto) {
     const { first_name, last_name, email, phone_number, postal_code } =
       createSupportDto;
 
     try {
-      const request = this.createRepository.create({
+      const request = this.requestRepository.create({
         first_name,
         last_name,
         email,
@@ -23,23 +23,23 @@ export class SupportService {
         postal_code,
       });
 
-      const newRequest = this.createRepository.save(request);
+      const newRequest = this.requestRepository.save(request);
 
       return {
         message: 'Send your Request',
         request: newRequest,
       };
     } catch {
-      throw new BadRequestException('Failed to create Anniversary certificate');
+      throw new BadRequestException('Failed to create Request');
     }
   }
 
   async findAll() {
-    return await this.createRepository.find();
+    return await this.requestRepository.find();
   }
 
   async findOne(id: number) {
-    const request = await this.createRepository.findOneBy({ id });
+    const request = await this.requestRepository.findOneBy({ id });
     if (!request) {
       throw new BadRequestException(`Request with id ${id} not found`);
     }
@@ -47,11 +47,11 @@ export class SupportService {
   }
 
   async remove(id: number) {
-    const request = await this.createRepository.findOneBy({ id });
+    const request = await this.requestRepository.findOneBy({ id });
     if (!request) {
       throw new BadRequestException(`Request with id ${id} not found`);
     }
-    await this.createRepository.remove(request);
+    await this.requestRepository.remove(request);
     return request;
   }
 }
