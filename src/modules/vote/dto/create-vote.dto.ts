@@ -1,6 +1,6 @@
-import { IsNotEmpty, IsString, IsEmail } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
-export class CreateSupportDto {
+export class CreateVoteDto {
   @IsNotEmpty({ message: 'First name is required.' })
   @IsString()
   first_name: string;
@@ -16,8 +16,4 @@ export class CreateSupportDto {
   @IsNotEmpty({ message: 'Last name is required.' })
   @IsString()
   last_name: string;
-
-  @IsNotEmpty({ message: 'Phone number is required.' })
-  @IsString()
-  phone_number: string;
 }
