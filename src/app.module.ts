@@ -13,10 +13,10 @@ import { MediaModule } from './modules/media/media.module';
 import { ContactModule } from './modules/contact/contact.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { CertificatesModule } from './modules/certificates/certificates.module';
+import { SupportModule } from './modules/support/support.module';
 import * as dotenv from 'dotenv';
 
 dotenv.config({ path: '.env.local' });
-
 @Module({
   imports: [
     TypeOrmModule.forRoot(pool),
@@ -34,6 +34,7 @@ dotenv.config({ path: '.env.local' });
     ContactModule,
     DashboardModule,
     CertificatesModule,
+    SupportModule,
   ],
 })
 export class AppModule implements NestModule {
