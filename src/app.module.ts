@@ -14,6 +14,7 @@ import { ContactModule } from './modules/contact/contact.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { CertificatesModule } from './modules/certificates/certificates.module';
 import { SupportModule } from './modules/support/support.module';
+import { VoteModule } from './modules/vote/vote.module';
 import * as dotenv from 'dotenv';
 
 dotenv.config({ path: '.env.local' });
@@ -35,6 +36,7 @@ dotenv.config({ path: '.env.local' });
     DashboardModule,
     CertificatesModule,
     SupportModule,
+    VoteModule,
   ],
 })
 export class AppModule implements NestModule {
