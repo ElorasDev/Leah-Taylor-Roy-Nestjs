@@ -26,11 +26,11 @@ export class Event {
   @Column({ nullable: true }) // must be releation to cateroy table
   category_id: number;
 
-  @Column({ type: 'date', nullable: true })
-  start_datetime: Date;
+  @Column({ length: 256, nullable: true })
+  start_datetime: string;
 
-  @Column({ type: 'date', nullable: true })
-  end_datetime: Date;
+  @Column({ length: 256, nullable: true })
+  end_datetime: string;
 
   @Column({ nullable: false, type: 'int', default: 0 })
   members: number | 0;

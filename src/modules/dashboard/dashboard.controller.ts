@@ -8,8 +8,8 @@ import {
   Delete,
   Param,
   Patch,
-  UploadedFile,
   UseInterceptors,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -34,6 +34,7 @@ import { UpdateEventDto } from '../event/dto/update-event.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MediaService } from '../media/media.service';
 import { EventParticipantsService } from '../event/event-participants.service';
+import { UpdateMediatDto } from '../media/dto/update-media.dto';
 
 @ApiTags('dashboard')
 @Controller('dashboard')
@@ -56,10 +57,10 @@ export class DashboardController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('event-participants/:id')
+  @Get('event-participants/:event_id')
   @ApiOperation({ summary: 'Get participants of an event' })
   @ApiParam({
-    name: 'id',
+    name: 'event_id',
     required: true,
     description: 'ID of the event',
   })
@@ -68,8 +69,8 @@ export class DashboardController {
     description: 'Return participants of the event.',
   })
   @ApiResponse({ status: 404, description: 'Event not found.' })
-  async getEventParticipants(@Param('id') id: number) {
-    return this.eventParticipantsService.findParticipants(Number(id));
+  async getEventParticipants(@Param('event_id') eventId: string) {
+    return this.eventParticipantsService.findParticipants(Number(eventId));
   }
 
   @UseGuards(JwtAuthGuard)
@@ -114,6 +115,7 @@ export class DashboardController {
     @Request() req: { user: User },
     @Body() createEventDto: CreateEventDto,
   ) {
+    console.log('data is:', createEventDto);
     return this.eventService.createEvent(createEventDto, req.user);
   }
 
@@ -138,11 +140,26 @@ export class DashboardController {
       },
     },
   })
+  @Post()
   async uploadFile(
+    @Body()
+    body: {
+      filename: string;
+      path: string;
+      mimetype: string;
+      size: number;
+      published: boolean;
+    },
     @Request() req: { user: User },
-    @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.mediaService.createMedia(file, req.user);
+    return this.mediaService.createMedia(
+      body.filename,
+      body.path,
+      body.mimetype,
+      body.size,
+      req.user,
+      body.published,
+    );
   }
 
   @UseGuards(JwtAuthGuard)
@@ -162,7 +179,6 @@ export class DashboardController {
 
   @UseGuards(JwtAuthGuard)
   @Patch('update-file/:id')
-  @UseInterceptors(FileInterceptor('file'))
   @ApiOperation({ summary: 'Update a file' })
   @ApiResponse({
     status: 200,
@@ -171,9 +187,17 @@ export class DashboardController {
   @ApiResponse({ status: 404, description: 'File not found.' })
   async updateFile(
     @Param('id') id: number,
-    @UploadedFile() file: Express.Multer.File,
+    @Body() updateNewsPostDto: UpdateMediatDto,
   ) {
-    return this.mediaService.updateMedia(Number(id), file);
+    if (updateNewsPostDto.published === undefined) {
+      throw new BadRequestException('Published status is required.');
+    }
+
+    const updateMediaDto = {
+      published: updateNewsPostDto.published,
+    };
+
+    return this.mediaService.updateMedia(Number(id), updateMediaDto);
   }
 
   @UseGuards(JwtAuthGuard)

@@ -14,12 +14,10 @@ export class PostService {
   ) {}
 
   async createPost(createPostDto: CreatePostDto, user: User): Promise<Blog> {
-    const { title, category_id, content, index_image_url, status } =
-      createPostDto;
+    const { title, content, index_image_url, status } = createPostDto;
 
     const newPost = this.blog_repository.create({
       title,
-      category_id,
       content,
       index_image_url,
       status,

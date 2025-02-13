@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { json, urlencoded } from 'express';
 import * as passport from 'passport';
 import * as session from 'express-session';
 import * as dotenv from 'dotenv';
@@ -10,6 +11,15 @@ dotenv.config({ path: '.env.local' });
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.enableCors({
+    origin: [
+      'https://leahtaylorroymp-development.vercel.app',
+      'http://localhost:3000',
+    ],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type, Authorization, Cache-Control',
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -26,6 +36,8 @@ async function bootstrap() {
   );
   app.use(passport.initialize());
   app.use(passport.session());
+  app.use(json({ limit: '100mb' }));
+  app.use(urlencoded({ limit: '100mb', extended: true }));
 
   const config = new DocumentBuilder()
     .setTitle('Leah Taylor Roy Nest App')
@@ -36,6 +48,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(3000);
+  await app.listen(3001);
 }
 bootstrap();

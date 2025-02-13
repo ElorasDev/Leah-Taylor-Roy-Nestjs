@@ -21,6 +21,35 @@ export class EventService {
     } else return this.event_repository.find();
   }
 
+  async findEvent(id: number, title: string) {
+    const event = await this.event_repository.findOne({
+      where: {
+        id,
+        title,
+      },
+      select: [
+        'id',
+        'title',
+        'user',
+        'index_image_url',
+        'description',
+        'status',
+        'location',
+        'start_datetime',
+        'end_datetime',
+        'created_at',
+        'updated_at',
+      ],
+    });
+
+    if (!event) {
+      throw new NotFoundException(
+        `Event with id "${id}" and title "${title}" not found`,
+      );
+    }
+    return event;
+  }
+
   async findUpcomingEventByTitle(title: string) {
     const event = await this.event_repository.findOne({
       where: {
@@ -128,6 +157,7 @@ export class EventService {
       description,
       start_datetime,
       end_datetime,
+      location,
       status,
     } = createEventDto;
 
@@ -137,6 +167,7 @@ export class EventService {
       index_image_url,
       start_datetime,
       end_datetime,
+      location,
       status,
       user,
     });

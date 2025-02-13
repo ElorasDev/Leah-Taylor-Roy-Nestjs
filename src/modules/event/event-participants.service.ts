@@ -20,17 +20,18 @@ export class EventParticipantsService {
 
   async registerClient(
     title: string,
+    id: number,
     registerClient: RegisterClientDto,
   ): Promise<EventParticipants> {
     const { fullname, email, phone_number } = registerClient;
 
-    const event = await this.eventRepository.findOne({ where: { title } });
+    const event = await this.eventRepository.findOne({ where: { title, id } });
     if (!event) {
       throw new NotFoundException('Event not found');
     }
 
     const existingParticipant = await this.eventParticipantsRepository.findOne({
-      where: { email, event },
+      where: { email, phone_number, event },
     });
     if (existingParticipant) {
       throw new BadRequestException(
@@ -55,13 +56,13 @@ export class EventParticipantsService {
 
   async findParticipants(eventId: number): Promise<EventParticipants[]> {
     const event = await this.eventRepository.findOne({
-      where: { id: eventId },
+      where: { id: Number(eventId) },
     });
     if (!event) {
       throw new NotFoundException(`Event with ID ${eventId} not found`);
     }
     const participants = await this.eventParticipantsRepository.find({
-      where: { event },
+      where: { event_id: Number(event.id) },
     });
     return participants;
   }

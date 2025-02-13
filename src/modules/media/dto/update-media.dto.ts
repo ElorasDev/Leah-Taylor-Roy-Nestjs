@@ -1,4 +1,7 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateMediaDto } from './create-media.dto';
+import { IsBoolean, IsOptional } from 'class-validator';
 
-export class UpdateMediaDto extends PartialType(CreateMediaDto) {}
+export class UpdateMediatDto {
+  @IsOptional()
+  @IsBoolean()
+  published?: boolean;
+}

@@ -1,10 +1,4 @@
-import {
-  IsDate,
-  IsEnum,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateEventDto {
   @IsNotEmpty()
@@ -24,12 +18,16 @@ export class CreateEventDto {
   description: string;
 
   @IsNotEmpty()
-  @IsDate()
-  start_datetime: Date;
+  @IsString()
+  start_datetime: string;
 
   @IsNotEmpty()
-  @IsDate()
-  end_datetime: Date;
+  @IsString()
+  end_datetime: string;
+
+  @IsNotEmpty()
+  @IsString()
+  location: string;
 
   @IsNotEmpty()
   @IsEnum(['upcoming', 'ongoing', 'complated', 'canceled'])
