@@ -1,4 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('vote')
 export class Vote {
@@ -16,4 +21,16 @@ export class Vote {
 
   @Column({ nullable: false, length: 256 })
   last_name: string;
+
+  @CreateDateColumn({
+    type: 'timestamp',
+    transformer: {
+      from: (value: Date) =>
+        new Date(
+          value.toLocaleString('en-CA', { timeZone: 'America/Toronto' }),
+        ),
+      to: (value: Date) => value,
+    },
+  })
+  created_at: Date;
 }
