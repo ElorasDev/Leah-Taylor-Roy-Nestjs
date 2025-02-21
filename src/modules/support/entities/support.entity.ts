@@ -1,4 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('support')
 export class Support {
@@ -19,4 +24,16 @@ export class Support {
 
   @Column({ nullable: false, length: 256 })
   phone_number: string;
+
+  @CreateDateColumn({
+    type: 'timestamp',
+    transformer: {
+      from: (value: Date) =>
+        new Date(
+          value.toLocaleString('en-CA', { timeZone: 'America/Toronto' }),
+        ),
+      to: (value: Date) => value,
+    },
+  })
+  created_at: Date;
 }
