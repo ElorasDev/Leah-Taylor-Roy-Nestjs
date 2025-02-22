@@ -7,10 +7,12 @@ import { AnniversaryCertificate } from './entities/anniversary_certificate.entit
 import { BirthdayCardCertificate } from './entities/birthday_cards_certificate.entity';
 import { BirthdayCertificate } from './entities/birthday_certificate.entity';
 import { UniqueCertificate } from './entities/unique_certificate.entity';
+import { User } from '../users/entities/user.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
+      User,
       Certificate,
       AnniversaryCertificate,
       BirthdayCardCertificate,

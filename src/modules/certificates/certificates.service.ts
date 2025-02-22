@@ -186,7 +186,46 @@ export class CertificatesService {
   }
 
   async findAll() {
-    return await this.certificateRepository.find();
+    return await this.certificateRepository
+      .createQueryBuilder('certificate')
+      .select([
+        'id',
+        'email',
+        "COALESCE(certificate.certificate_type, '') AS certificate_type",
+        'first_name',
+        'last_name',
+        'phone_number',
+        'certificate_description',
+        'select_certificate',
+        'recipient_first_name',
+        'recipient_last_name',
+        'recipient_email',
+        'recipient_address',
+        'postal_code',
+        'recipient_birthday',
+        'certificate_destination',
+        'additional_certificates',
+        'note',
+        'recipient_postal_code',
+        'is_for_self',
+        'recipient1_first_name',
+        'recipient1_last_name',
+        'recipient2_first_name',
+        'recipient2_last_name',
+        'date_of_marriage',
+      ])
+      .getRawMany();
+  }
+
+  async findCertificatesByType(
+    certificateType: string,
+  ): Promise<Certificate[]> {
+    return await this.certificateRepository
+      .createQueryBuilder('certificate')
+      .where('certificate.certificate_type = :certificateType', {
+        certificateType,
+      })
+      .getMany();
   }
 
   async findOne(id: number) {

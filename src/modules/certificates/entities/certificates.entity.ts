@@ -6,7 +6,14 @@ import {
 } from 'typeorm';
 
 @Entity('certificates')
-@TableInheritance({ column: { type: 'varchar', name: 'certificate_type' } })
+@TableInheritance({
+  column: {
+    type: 'varchar',
+    name: 'certificate_type',
+    nullable: true,
+    select: true,
+  },
+})
 export abstract class Certificate {
   @PrimaryGeneratedColumn()
   id: number;
