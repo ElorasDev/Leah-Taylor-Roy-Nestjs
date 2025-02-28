@@ -14,7 +14,7 @@ async function bootstrap() {
 
   app.enableCors({
     origin: [
-      'https://leahtaylorroymp-development.vercel.app',
+      'https://www.leahtaylorroymp.ca',
       'http://localhost:3000',
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
