@@ -1,10 +1,19 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { CertificatesService } from './certificates.service';
 import { PostBirthdayCardCertificateDto } from './dto/post-birthday-cards-certificate.dto';
 import { PostAnniversaryCertificateDto } from './dto/post-anniversary-certificate.dto';
 import { PostUniqueCertificateDto } from './dto/post-unique-certificate.dto';
 import { PostBirthdayCertificateDto } from './dto/post-birthday-certificate.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('Certificates')
 @Controller('certificates')
@@ -87,6 +96,7 @@ export class CertificatesController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   @ApiOperation({ summary: 'Get all certificates' })
   @ApiResponse({ status: 200, description: 'List of all certificates' })
@@ -94,6 +104,15 @@ export class CertificatesController {
     return this.certificatesService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get(':certificate_type')
+  @ApiOperation({ summary: 'Get all certificates' })
+  @ApiResponse({ status: 200, description: 'List of all certificates' })
+  async findCertificate(@Param('certificate_type') certificate: string) {
+    return this.certificatesService.findCertificatesByType(certificate);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   @ApiOperation({ summary: 'Get a certificate by ID' })
   @ApiParam({ name: 'id', required: true, description: 'Certificate ID' })
@@ -103,6 +122,7 @@ export class CertificatesController {
     return this.certificatesService.findOne(+id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a certificate by ID' })
   @ApiParam({ name: 'id', required: true, description: 'Certificate ID' })
