@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { MailerService } from '@nestjs-modules/mailer';
 import { CreateVoteDto } from './dto/create-vote.dto';
 import { Vote } from './entities/vote.entity';
 
@@ -9,7 +10,9 @@ export class VoteService {
   constructor(
     @InjectRepository(Vote)
     private readonly voteRepository: Repository<Vote>,
+    private readonly mailerService: MailerService,
   ) {}
+
   async createVote(createVoteDto: CreateVoteDto) {
     const { first_name, last_name, email, postal_code } = createVoteDto;
 
@@ -19,6 +22,21 @@ export class VoteService {
         last_name,
         email,
         postal_code,
+      });
+
+      setImmediate(async () => {
+        await this.mailerService.sendMail({
+          text: 'test',
+          subject: 'test',
+          to: 'aryansab80@gmail.com',
+          template: 'contact.html',
+          context: {
+            first_name,
+            last_name,
+            email,
+            postal_code,
+          },
+        });
       });
 
       const newVote = this.voteRepository.save(vote);
