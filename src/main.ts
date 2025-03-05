@@ -16,6 +16,7 @@ async function bootstrap() {
     origin: [
       'https://www.leahtaylorroymp.ca',
       'https://leah-campaign.liara.run',
+      'https://leahtaylorroymp.ca',
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type, Authorization, Cache-Control',
