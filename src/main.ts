@@ -52,3 +52,5 @@ async function bootstrap() {
   await app.listen(3001);
 }
 bootstrap();
+
+// Compare this snippet from src/app.module.ts:
