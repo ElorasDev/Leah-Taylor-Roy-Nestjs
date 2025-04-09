@@ -1,13 +1,27 @@
-import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  UseGuards,
+  Logger,
+} from '@nestjs/common';
 import { ContactService } from './contact.service';
 import { SendContactDto } from './dto/send-content.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/jwt-auth.guard';
+import { ConfigService } from '@nestjs/config';
 
 @ApiTags('contact')
 @Controller('contact')
 export class ContactController {
-  constructor(private readonly contactService: ContactService) {}
+  private readonly logger = new Logger(ContactController.name);
+
+  constructor(
+    private readonly contactService: ContactService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Send a contact message' })
@@ -16,8 +30,40 @@ export class ContactController {
     description: 'The contact message has been successfully sent.',
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
-  async sendContent(@Body() createContactDto: SendContactDto) {
-    return this.contactService.sendContent(createContactDto);
+  async submitContactForm(@Body() contactFormDto: SendContactDto) {
+    this.logger.log(
+      `Received contact form submission from: ${contactFormDto.email}`,
+    );
+
+    const adminEmail = this.configService.get<string>('ADMIN_EMAIL');
+
+    if (!adminEmail) {
+      this.logger.error(
+        'ADMIN_EMAIL is not configured in environment variables',
+      );
+      return {
+        success: false,
+        message: 'ADMIN_EMAIL is not configured in environment variables',
+      };
+    }
+
+    const result = await this.contactService.sendContactFormEmail(
+      contactFormDto,
+      adminEmail,
+    );
+
+    if (result) {
+      return {
+        success: true,
+        message: 'Your contact message has been successfully sent.',
+      };
+    } else {
+      return {
+        success: false,
+        message:
+          'sending email failed. Please try again later or contact support.',
+      };
+    }
   }
 
   @UseGuards(JwtAuthGuard)

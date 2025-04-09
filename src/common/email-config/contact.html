@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>New Contact Form Submission</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 20px;
+    }
+    .email-container {
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 30px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      color: #333;
+    }
+    p {
+      color: #555;
+    }
+    .details {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    .details td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .details td.label {
+      font-weight: bold;
+      background-color: #fafafa;
+      width: 150px;
+    }
+    .message-content {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      border-left: 4px solid #ddd;
+    }
+    .footer {
+      margin-top: 30px;
+      font-size: 0.9em;
+      color: #777;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <h2>New Contact Form Submission</h2>
+    <p>You have received a new submission from your contact form. The details are as follows:</p>
+    <table class="details">
+      <tr>
+        <td class="label">Fullname</td>
+        <td>{{fullname}}</td>
+      </tr>
+      <tr>
+        <td class="label">Email</td>
+        <td>{{email}}</td>
+      </tr>
+      <tr>
+        <td class="label">Phone Number</td>
+        <td>{{phone_number}}</td>
+      </tr>
+    </table>
+    
+    <h3>Message:</h3>
+    <div class="message-content">
+      {{message}}
+    </div>
+    
+    <div class="footer">
+      <p>This email was sent automatically from your website.</p>
+    </div>
+  </div>
+</body>
+</html>
