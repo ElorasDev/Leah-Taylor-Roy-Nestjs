@@ -2,74 +2,66 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>New Contact Form Submission</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Contact Message from {{fullname}}</title>
   <style>
-    body {
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      background-color: #f0f0f0;
-      margin: 0;
-      padding: 20px;
-    }
-    .email-container {
-      background-color: #ffffff;
-      border-radius: 8px;
-      padding: 30px;
-      max-width: 600px;
-      margin: auto;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    h2 {
-      color: #333;
-    }
-    p {
-      color: #555;
-    }
-    .details {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    .details td {
-      padding: 10px;
-      border-bottom: 1px solid #ddd;
-    }
-    .details td.label {
-      font-weight: bold;
-      background-color: #fafafa;
-      width: 150px;
-    }
-    .footer {
-      margin-top: 30px;
-      font-size: 0.9em;
-      color: #777;
-      text-align: center;
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f7f7f7; margin: 0; padding: 0; }
+    .email-container { background-color: #ffffff; max-width: 600px; margin: 20px auto; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .email-header { background-color: #2c5282; color: white; padding: 20px; border-top-left-radius: 8px; border-top-right-radius: 8px; text-align: center; }
+    .email-body { padding: 30px; }
+    .white-list-notice { font-size: 13px; color: #666; background-color: #f9f9f9; padding: 10px; border-radius: 4px; margin-bottom: 20px; }
+    h2 { color: #2c5282; margin-top: 0; }
+    p { color: #444; line-height: 1.5; }
+    .details { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    .details td { padding: 12px; border-bottom: 1px solid #eee; }
+    .details td.label { font-weight: bold; width: 140px; color: #555; }
+    .message-content { margin: 20px 0; padding: 15px; background-color: #f9f9f9; border-radius: 5px; border-left: 4px solid #2c5282; color: #333; }
+    .footer { margin-top: 30px; padding: 20px; font-size: 13px; color: #777; text-align: center; border-top: 1px solid #eee; }
+    .footer a { color: #2c5282; text-decoration: none; }
+    @media only screen and (max-width: 620px) {
+      .email-container { width: 100%; margin: 0; }
+      .details td.label { width: 100px; }
     }
   </style>
 </head>
 <body>
   <div class="email-container">
-    <h2>New Contact Form Submission</h2>
-    <p>You have received a new submission from your contact form. The details are as follows:</p>
-    <table class="details">
-      <tr>
-        <td class="label">First Name</td>
-        <td>{{first_name}}</td>
-      </tr>
-      <tr>
-        <td class="label">Last Name</td>
-        <td>{{last_name}}</td>
-      </tr>
-      <tr>
-        <td class="label">Email</td>
-        <td>{{email}}</td>
-      </tr>
-      <tr>
-        <td class="label">Postal Code</td>
-        <td>{{postal_code}}</td>
-      </tr>
-    </table>
+    <div class="email-header">
+      <h1>New Contact Message</h1>
+    </div>
+    
+    <div class="email-body">
+      
+      <h2>You've received a new message</h2>
+      <p>Someone has contacted you through your website's contact form. Here are the details:</p>
+      
+      <table class="details">
+        <tr>
+          <td class="label">Name:</td>
+          <td>{{fullname}}</td>
+        </tr>
+        <tr>
+          <td class="label">Email:</td>
+          <td><a href="mailto:{{email}}">{{email}}</a></td>
+        </tr>
+        <tr>
+          <td class="label">Phone:</td>
+          <td>{{phone_number}}</td>
+        </tr>
+      </table>
+      
+      <h3>Message Content:</h3>
+      <div class="message-content">
+        {{message}}
+      </div>
+      
+      <p>You can reply directly to this email to respond to {{fullname}}.</p>
+    </div>
+    
     <div class="footer">
-      <p>This email was sent automatically from your website.</p>
+      <p>This email was sent from the contact form on your website.</p>
+      <p>Official website: <a href="https://leahtaylorroymp.ca">leahtaylorroymp.ca</a></p>
+      <p>&copy; 2025 Your Organization. All rights reserved.</p>
     </div>
   </div>
 </body>
