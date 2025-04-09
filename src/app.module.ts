@@ -19,6 +19,7 @@ import { SupportModule } from './modules/support/support.module';
 import { VoteModule } from './modules/vote/vote.module';
 import { VolunteerModule } from './modules/volunteer/volunteer.module';
 import * as dotenv from 'dotenv';
+import { join } from 'path';
 
 dotenv.config({ path: '.env.local' });
 @Module({
@@ -37,7 +38,7 @@ dotenv.config({ path: '.env.local' });
         from: `Leah Taylor Roy <contact@supportleah.ca`,
       },
       template: {
-        dir: process.cwd() + '/templates',
+        dir: join(__dirname, '../../../templates'),
         adapter: new HandlebarsAdapter(),
         options: {
           strict: false,
