@@ -32,7 +32,7 @@ dotenv.config({ path: '.env.local' });
           from: `Leah Taylor Roy <contact@supportleah.ca>`,
         },
         template: {
-          dir: join(__dirname, '..', 'templates'),
+          dir: join(process.cwd(), 'src/modules/contact/templates'),
           adapter: new HandlebarsAdapter(),
           options: {
             strict: true,

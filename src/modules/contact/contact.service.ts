@@ -31,7 +31,7 @@ export class ContactService {
       await this.mailerService.sendMail({
         to: recipient,
         subject: 'New Contact Form Submission',
-        template: 'contact.html',
+        template: 'contact.hbs',
         context: {
           fullname: contactForm.fullname,
           email: contactForm.email,
