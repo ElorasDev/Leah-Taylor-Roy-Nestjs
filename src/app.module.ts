@@ -6,8 +6,6 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { pool } from './common/db';
-import { MailerModule } from '@nestjs-modules/mailer';
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { BlogModule } from './modules/blog/blog.module';
 import { NewsModule } from './modules/news/news.module';
 import { EventModule } from './modules/event/event.module';
@@ -19,32 +17,10 @@ import { SupportModule } from './modules/support/support.module';
 import { VoteModule } from './modules/vote/vote.module';
 import { VolunteerModule } from './modules/volunteer/volunteer.module';
 import * as dotenv from 'dotenv';
-import { join } from 'path';
 
 dotenv.config({ path: '.env.local' });
 @Module({
   imports: [
-    MailerModule.forRoot({
-      transport: {
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true,
-        auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASSWORD,
-        },
-      },
-      defaults: {
-        from: `Leah Taylor Roy <contact@supportleah.ca`,
-      },
-      template: {
-        dir: join(process.cwd(), 'templates'),
-        adapter: new HandlebarsAdapter(),
-        options: {
-          strict: false,
-        },
-      },
-    }),
     TypeOrmModule.forRoot(pool),
     PassportModule,
     JwtModule.register({
